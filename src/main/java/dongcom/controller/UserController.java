@@ -1,5 +1,6 @@
 package dongcom.controller;
 
+import java.lang.reflect.Executable;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,13 +30,20 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    /*
-     * @PutMapping("/api/user")
-     * public User updateUser(@RequestBody User user) {
-     * Optional<User> currentUser = getUserById(user.getId());
-     * 
-     * };
-     */
+    @PutMapping("/api/users/{id}")
+    public User updateUser(@RequestBody User user, @PathVariable("id") Long id) throws Exception {
+        Optional<User> otp = userRepository.findById(id);
+        if (otp.isEmpty())
+            throw new Exception("user not found with id " + id);
+
+        User existingUser = otp.get();
+        existingUser.setFullName(user.getFullName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhone(user.getPhone());
+        existingUser.setRole(user.getRole());
+
+        return userRepository.save(existingUser);
+    };
 
     @GetMapping("/api/users/{id}")
     public User getUserById(@PathVariable("id") Long id) throws Exception {
