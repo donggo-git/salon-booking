@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class User {
@@ -13,11 +14,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String fullName;
+    @NotBlank(message = "Email is required")
     private String email;
     private String phone;
     private String role;
     private LocalDate createAt;
     private LocalDate updateAt;
+    @NotBlank(message = "Password is required")
+    private String password;
 
     // constructor
     public User(String fullName, String email, String phone, String role, LocalDate createAt, LocalDate updateAt) {
@@ -87,5 +91,13 @@ public class User {
 
     public void setUpdateAt(LocalDate newUpdateAt) {
         this.updateAt = newUpdateAt;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
     }
 }
