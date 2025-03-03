@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import dongcom.repository.UserRepository;
 import jakarta.validation.Valid;
+import dongcom.exception.UserException;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,7 +38,7 @@ public class UserController {
     public User updateUser(@RequestBody User user, @PathVariable("id") Long id) throws Exception {
         Optional<User> otp = userRepository.findById(id);
         if (otp.isEmpty())
-            throw new Exception("user not found with id " + id);
+            throw new UserException("user not found with id " + id);
 
         User existingUser = otp.get();
         existingUser.setFullName(user.getFullName());
@@ -54,14 +55,14 @@ public class UserController {
         if (otp.isPresent()) {
             return otp.get();
         }
-        throw new Exception("user not found");
+        throw new UserException("user not found with id " + id);
     };
 
     @DeleteMapping("api/users/{id}")
     public String deleteUserById(@PathVariable("id") Long id) throws Exception {
         Optional<User> otp = userRepository.findById(id);
         if (otp.isEmpty()) {
-            throw new Exception("user not found with id " + id);
+            throw new UserException("user not found with id " + id);
         }
 
         userRepository.deleteById(otp.get().getId());
