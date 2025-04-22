@@ -9,7 +9,7 @@ import dongcom.payload_dto.UserDTO;
 public interface StudyService {
     Study createStudy(StudyDTO study, UserDTO user);
 
-    Study updateStudy(StudyDTO study, UserDTO user, Long studyId);
+    void updateStudy(StudyDTO study, UserDTO user, Long studyId) throws Exception;
 
     List<Study> getAllStudies();
 
