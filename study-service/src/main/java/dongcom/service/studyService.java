@@ -6,7 +6,7 @@ import dongcom.modal.Study;
 import dongcom.payload_dto.StudyDTO;
 import dongcom.payload_dto.UserDTO;
 
-public interface studyService {
+public interface StudyService {
     Study createStudy(StudyDTO study, UserDTO user);
 
     Study updateStudy(StudyDTO study, UserDTO user, Long studyId);
