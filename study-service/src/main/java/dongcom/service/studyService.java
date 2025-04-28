@@ -13,7 +13,7 @@ public interface StudyService {
 
     List<Study> getAllStudies();
 
-    Study getStudyById(Long studyId);
+    Study getStudyById(Long studyId) throws Exception;
 
     Study getStudyByOwnerId(Long ownerId);
 

@@ -58,18 +58,22 @@ public class StudyServiceImpl implements StudyService {
         return studyRepository.findAll();
     }
 
-    public Study getStudyById(Long studyId) {
+    @Override
+    public Study getStudyById(Long studyId) throws Exception {
         Study study = studyRepository.findById(studyId).orElse(null);
+        if (study == null) {
+            throw new Exception("study not exist");
+        }
         return study;
     }
 
     @Override
     public Study getStudyByOwnerId(Long ownerId) {
-        return null;
+        return studyRepository.findByOwnerId(ownerId);
     }
 
     @Override
     public List<Study> searchStudyByCityName(String city) {
-        return List.of();
+        return studyRepository.searchStudy(city);
     }
 }
