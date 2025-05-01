@@ -35,7 +35,7 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public void updateStudy(StudyDTO req, UserDTO user, Long studyId) throws Exception {
+    public Study updateStudy(StudyDTO req, UserDTO user, Long studyId) throws Exception {
         Study existingStudy = studyRepository.findById(req.getId()).orElse(null);
 
         if (existingStudy != null && existingStudy.getOwnerId().equals(user.getId())) {
@@ -48,6 +48,8 @@ public class StudyServiceImpl implements StudyService {
             existingStudy.setOpenTime(req.getOpenTime());
             existingStudy.setCloseTime(req.getCloseTime());
             existingStudy.setPhoneNumber(req.getPhoneNumber());
+
+            return existingStudy;
 
         }
         throw new Exception("study not exist");
