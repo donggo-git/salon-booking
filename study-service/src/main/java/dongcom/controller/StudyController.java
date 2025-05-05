@@ -46,8 +46,6 @@ public class StudyController {
 
     @GetMapping()
     public ResponseEntity<List<StudyDTO>> getStudy() throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
         List<Study> studies = studyService.getAllStudies();
 
         List<StudyDTO> studyDTOS = studies.stream().map((study) -> {
@@ -61,9 +59,6 @@ public class StudyController {
     @GetMapping("/${studyId}")
     public ResponseEntity<StudyDTO> getStudyById(
             @PathVariable Long studyId) throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
-
         Study study = studyService.getStudyById(studyId);
         StudyDTO studyDTO1 = StudyMapper.mapToDTO(study);
 
@@ -73,8 +68,7 @@ public class StudyController {
     @GetMapping("/search")
     public ResponseEntity<List<StudyDTO>> searchStudy(
             @RequestParam("city") String city) throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
+
         List<Study> studies = studyService.searchStudyByCityName(city);
 
         List<StudyDTO> studyDTOS = studies.stream().map((study) -> {
@@ -83,5 +77,16 @@ public class StudyController {
         }).toList();
 
         return ResponseEntity.ok(studyDTOS);
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<StudyDTO> getStudyByOwnerId() throws Exception {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(1L);
+
+        Study study = studyService.getStudyByOwnerId(userDTO.getId());
+        StudyDTO studyDTO1 = StudyMapper.mapToDTO(study);
+
+        return ResponseEntity.ok(studyDTO1);
     }
 }
