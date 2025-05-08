@@ -49,8 +49,7 @@ public class StudyServiceImpl implements StudyService {
             existingStudy.setCloseTime(req.getCloseTime());
             existingStudy.setPhoneNumber(req.getPhoneNumber());
 
-            return existingStudy;
-
+            return studyRepository.save(existingStudy);
         }
         throw new Exception("study not exist");
     }

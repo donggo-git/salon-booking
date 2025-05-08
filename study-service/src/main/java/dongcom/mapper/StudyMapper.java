@@ -15,6 +15,7 @@ public class StudyMapper {
         studyDTO.setOpenTime(study.getOpenTime());
         studyDTO.setPhoneNumber(study.getPhoneNumber());
         studyDTO.setOwnerId(study.getOwnerId());
+        studyDTO.setEmail(study.getEmail());
 
         return studyDTO;
     }
