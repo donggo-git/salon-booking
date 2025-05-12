@@ -5,10 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
+import lombok.Data;
 
 @Entity
-@Getter
+@Data
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,5 +19,6 @@ public class Category {
 
     private String image;
 
+    @Column(nullable = false)
     private Long studyId;
 }
