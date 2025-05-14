@@ -1,6 +1,6 @@
 package dongcom.service;
 
-import java.util.Locale.Category;
+import dongcom.modal.Category;
 import dongcom.payload_dto.StudyDTO;
 import java.util.Set;
 
@@ -10,7 +10,7 @@ public interface CategoryService {
 
     Set<Category> getAllCategoryByStudy(Long id);
 
-    Category getCategoryById(Long id);
+    Category getCategoryById(Long id) throws Exception;
 
-    void deleteCategoryById(Long id);
+    void deleteCategoryById(Long id) throws Exception;
 };
