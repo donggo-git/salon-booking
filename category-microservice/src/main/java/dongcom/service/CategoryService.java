@@ -12,5 +12,5 @@ public interface CategoryService {
 
     Category getCategoryById(Long id) throws Exception;
 
-    void deleteCategoryById(Long id) throws Exception;
+    void deleteCategoryById(Long id, Long studyId) throws Exception;
 };
