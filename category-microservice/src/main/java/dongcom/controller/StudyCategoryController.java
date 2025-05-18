@@ -1,7 +1,8 @@
 package dongcom.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +21,26 @@ import lombok.RequiredArgsConstructor;
 public class StudyCategoryController {
     private final CategoryService categoryService;
 
-    @GetMapping()
+    @PostMapping()
     public ResponseEntity<Category> createCategory(
             @RequestBody Category category) {
 
         StudyDTO studyDTO = new StudyDTO();
         studyDTO.setId(1L);
-        Category categories = categoryService.saveCategory(category, studyDTO);
+        Category savedCategory = categoryService.saveCategory(category, studyDTO);
 
-        return ResponseEntity.ok(categories);
+        return ResponseEntity.ok(savedCategory);
+    };
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCategory(
+            @PathVariable Long id) throws Exception {
+
+        StudyDTO studyDTO = new StudyDTO();
+        studyDTO.setId(1L);
+        categoryService.deleteCategoryById(id, studyDTO.getId());
+        ;
+
+        return ResponseEntity.ok("Delete success category");
     };
 }
