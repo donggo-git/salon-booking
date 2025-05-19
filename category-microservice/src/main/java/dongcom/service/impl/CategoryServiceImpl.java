@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategoryById(Long id, Long studyId) throws Exception {
         Category category = getCategoryById(id);
-        if (category.getStudyId().equals(studyId)) {
+        if (!category.getStudyId().equals(studyId)) {
             throw new Exception("You don't have permission to delete this category");
         }
         categoryRepository.deleteById(id);
