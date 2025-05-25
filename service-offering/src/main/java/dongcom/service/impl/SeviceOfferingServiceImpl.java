@@ -9,26 +9,52 @@ import dongcom.modal.ServiceOffering;
 import dongcom.payload_dto.CategoryDTO;
 import dongcom.payload_dto.ServiceDTO;
 import dongcom.payload_dto.StudyDTO;
-import dongcom.service.ServiceOffieringService;
+import dongcom.repository.ServiceOfferingRepository;
+import dongcom.service.ServiceOfferingService;
+import lombok.RequiredArgsConstructor;
 
 @Service
-public class SeviceOfferingServiceImpl implements ServiceOffieringService {
+@RequiredArgsConstructor
+public class SeviceOfferingServiceImpl implements ServiceOfferingService {
+    private final ServiceOfferingRepository serviceOfferingRepository;
 
     @Override
     public ServiceOffering createService(StudyDTO studyDTO, ServiceDTO serviceDTO, CategoryDTO categoryDTO) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createService'");
+        ServiceOffering serviceOffering = new ServiceOffering();
+        serviceOffering.setImage(serviceDTO.getImage());
+        serviceOffering.setStudyId(studyDTO.getId());
+        serviceOffering.setName(serviceDTO.getName());
+        serviceOffering.setDescription(serviceDTO.getDescription());
+        serviceOffering.setCategoryId(serviceDTO.getCategoryId());
+        serviceOffering.setPrice(serviceDTO.getPrice());
+        serviceOffering.setDuration(serviceDTO.getDuration());
+
+        return serviceOfferingRepository.save(serviceOffering);
     }
 
     @Override
-    public ServiceOffering updateService(Long serviceId, ServiceOffering service) {
+    public ServiceOffering updateService(Long serviceId, ServiceOffering service) throws Exception {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateService'");
+
+        ServiceOffering serviceOffering = serviceOfferingRepository.findById(serviceId).orElse(null);
+
+        if (serviceOffering == null)
+            throw new Exception("Service not exist with id: " + serviceId);
+
+        serviceOffering.setImage(service.getImage());
+        serviceOffering.setName(service.getName());
+        serviceOffering.setDescription(service.getDescription());
+        serviceOffering.setPrice(service.getPrice());
+        serviceOffering.setDuration(service.getDuration());
+
+        return serviceOfferingRepository.save(serviceOffering);
     }
 
     @Override
     public Set<ServiceOffering> getAllServiceByStudy(Long studyId, Long categoryId) {
         // TODO Auto-generated method stub
+
         throw new UnsupportedOperationException("Unimplemented method 'getAllServiceByStudy'");
     }
 
