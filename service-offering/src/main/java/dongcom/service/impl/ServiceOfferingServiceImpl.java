@@ -1,7 +1,10 @@
 package dongcom.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class SeviceOfferingServiceImpl implements ServiceOfferingService {
+public class ServiceOfferingServiceImpl implements ServiceOfferingService {
     private final ServiceOfferingRepository serviceOfferingRepository;
 
     @Override
@@ -54,14 +57,18 @@ public class SeviceOfferingServiceImpl implements ServiceOfferingService {
     @Override
     public Set<ServiceOffering> getAllServiceByStudy(Long studyId, Long categoryId) {
         // TODO Auto-generated method stub
-
-        throw new UnsupportedOperationException("Unimplemented method 'getAllServiceByStudy'");
+        Set<ServiceOffering> services = serviceOfferingRepository.findByStudyId(studyId);
+        if (categoryId != null)
+            services = services.stream()
+                    .filter((service) -> service.getCategoryId() != null && service.getCategoryId() == categoryId)
+                    .collect(Collectors.toSet());
+        return services;
     }
 
     @Override
-    public List<ServiceOffering> getServicesbyIds(Set<Long> ids) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getServicesbyIds'");
+    public Set<ServiceOffering> getServicesbyIds(Set<Long> ids) {
+        List<ServiceOffering> services = serviceOfferingRepository.findAllById(ids);
+        return new HashSet<>(services);
     }
 
 }

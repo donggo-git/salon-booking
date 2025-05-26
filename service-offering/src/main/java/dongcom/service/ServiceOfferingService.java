@@ -13,5 +13,5 @@ public interface ServiceOfferingService {
 
     Set<ServiceOffering> getAllServiceByStudy(Long studyId, Long categoryId);
 
-    List<ServiceOffering> getServicesbyIds(Set<Long> ids);
+    Set<ServiceOffering> getServicesbyIds(Set<Long> ids);
 }
