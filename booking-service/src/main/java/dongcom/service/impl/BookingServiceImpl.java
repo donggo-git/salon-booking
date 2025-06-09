@@ -1,5 +1,6 @@
 package dongcom.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,10 @@ public class BookingServiceImpl implements BookingService {
     public Booking createBooking(BookingRequest booking, UserDTO userDTO, StudyDTO studyDTO,
             Set<ServiceDTO> serviceDTO) {
         // TODO Auto-generated method stub
-        // int totalDuration =
+        int totalDuration = serviceDTOSet.stream().mapToInt(ServiceDTO::getDuration).sum();
+
+        LocalDateTime bookingStartTime = booking.getStartTime();
+        LocalDateTime bookingEndTime = bookingStartTime.plusMinutes(totalDuration);
         throw new UnsupportedOperationException("Unimplemented method 'createBooking'");
     }
 
