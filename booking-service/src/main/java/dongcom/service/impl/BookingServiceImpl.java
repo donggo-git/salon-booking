@@ -26,11 +26,22 @@ public class BookingServiceImpl implements BookingService {
     public Booking createBooking(BookingRequest booking, UserDTO userDTO, StudyDTO studyDTO,
             Set<ServiceDTO> serviceDTO) {
         // TODO Auto-generated method stub
-        int totalDuration = serviceDTOSet.stream().mapToInt(ServiceDTO::getDuration).sum();
+        int totalDuration = serviceDTO.stream().mapToInt(ServiceDTO::getDuration).sum();
 
         LocalDateTime bookingStartTime = booking.getStartTime();
         LocalDateTime bookingEndTime = bookingStartTime.plusMinutes(totalDuration);
         throw new UnsupportedOperationException("Unimplemented method 'createBooking'");
+    }
+
+    public Boolean isTimeSlotAvailable(StudyDTO studyDTO, LocalDateTime bookingStartTime,
+            LocalDateTime bookingEndTime) throws Exception {
+
+        LocalDateTime studyOpenTime = studyDTO.getOpenTime().atDate(bookingStartTime.toLocalDate());
+        LocalDateTime studyCloseTime = studyDTO.getOpenTime().atDate(bookingEndTime.toLocalDate());
+
+        if (bookingStartTime.isBefore(studyOpenTime) || bookingEndTime.isAfter(studyCloseTime))
+            throw new Exception("Booking time must be in study service's working hour");
+        return true;
     }
 
     @Override
