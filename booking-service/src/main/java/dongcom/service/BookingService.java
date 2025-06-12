@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public interface BookingService {
-    Booking createBooking(BookingRequest booking, UserDTO userDTO, StudyDTO studyDTO, Set<ServiceDTO> serviceDTO);
+    Booking createBooking(BookingRequest booking, UserDTO userDTO, StudyDTO studyDTO, Set<ServiceDTO> serviceDTO)
+            throws Exception;
 
     List<Booking> getBookingsByCustomer(Long customerId);
 

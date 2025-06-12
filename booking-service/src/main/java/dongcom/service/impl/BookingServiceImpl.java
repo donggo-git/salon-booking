@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -20,16 +22,25 @@ import dongcom.service.BookingService;;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private final BookingRepository bookingRepository;
+    // private final BookingRepository bookingRepository;
 
     @Override
     public Booking createBooking(BookingRequest booking, UserDTO userDTO, StudyDTO studyDTO,
-            Set<ServiceDTO> serviceDTO) {
+            Set<ServiceDTO> serviceDTOSet) throws Exception {
         // TODO Auto-generated method stub
-        int totalDuration = serviceDTO.stream().mapToInt(ServiceDTO::getDuration).sum();
+        int totalDuration = serviceDTOSet.stream().mapToInt(ServiceDTO::getDuration).sum();
 
         LocalDateTime bookingStartTime = booking.getStartTime();
         LocalDateTime bookingEndTime = bookingStartTime.plusMinutes(totalDuration);
+
+        Boolean isSlotAvailable = isTimeSlotAvailable(studyDTO, bookingStartTime, bookingEndTime);
+        int totalPrice = serviceDTOSet.stream().mapToInt(ServiceDTO::getPrice).sum();
+        Set<Long> idList = serviceDTOSet.stream().map(ServiceDTO::getId).collect(Collectors.toSet());
+
+        Booking newBooking = new Booking();
+        newBooking.setCustomerId(userDTO.getId());
+        newBooking.setStudyId(studyDTO.getId());
+
         throw new UnsupportedOperationException("Unimplemented method 'createBooking'");
     }
 
