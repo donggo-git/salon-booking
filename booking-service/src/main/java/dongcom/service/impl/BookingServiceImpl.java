@@ -38,10 +38,26 @@ public class BookingServiceImpl implements BookingService {
 
         LocalDateTime studyOpenTime = studyDTO.getOpenTime().atDate(bookingStartTime.toLocalDate());
         LocalDateTime studyCloseTime = studyDTO.getOpenTime().atDate(bookingEndTime.toLocalDate());
+        List<Booking> existingBookings = getBookingByStudy(studyDTO.getId());
 
         if (bookingStartTime.isBefore(studyOpenTime) || bookingEndTime.isAfter(studyCloseTime))
             throw new Exception("Booking time must be in study service's working hour");
+
+        for (Booking existingBooking : existingBookings) {
+            LocalDateTime existingBookingStartTime = existingBooking.getStartTime();
+            LocalDateTime existingBookingEndTime = existingBooking.getEndTime();
+
+            if (bookingStartTime.isBefore(existingBookingEndTime) && bookingEndTime.isAfter(existingBookingStartTime))) {
+                throw new Exception("slot í not available, choose different time");
+            }
+
+            if(bookingStartTime.isEqual(existingBookingStartTime) || bookingEndTime.isEqual(existingBookingEndTime)){
+                throw new Exception("slot í not available, choose different time");
+            }
+        }
+
         return true;
+
     }
 
     @Override
