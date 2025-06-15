@@ -17,12 +17,14 @@ import dongcom.payload_dto.ServiceDTO;
 import dongcom.payload_dto.StudyDTO;
 import dongcom.payload_dto.UserDTO;
 import dongcom.repository.BookingRepository;
-import dongcom.service.BookingService;;
+import dongcom.service.BookingService;
+import lombok.RequiredArgsConstructor;;
 
 @Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-    // private final BookingRepository bookingRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
     public Booking createBooking(BookingRequest booking, UserDTO userDTO, StudyDTO studyDTO,
@@ -40,8 +42,13 @@ public class BookingServiceImpl implements BookingService {
         Booking newBooking = new Booking();
         newBooking.setCustomerId(userDTO.getId());
         newBooking.setStudyId(studyDTO.getId());
+        newBooking.setServiceIds(idList);
+        newBooking.setStatus(BookingStatus.PENDING);
+        newBooking.setStartTime(bookingStartTime);
+        newBooking.setEndTime(bookingEndTime);
+        newBooking.setTotalPrice(totalPrice);
 
-        throw new UnsupportedOperationException("Unimplemented method 'createBooking'");
+        return bookingRepository.save(newBooking);
     }
 
     public Boolean isTimeSlotAvailable(StudyDTO studyDTO, LocalDateTime bookingStartTime,
@@ -58,11 +65,11 @@ public class BookingServiceImpl implements BookingService {
             LocalDateTime existingBookingStartTime = existingBooking.getStartTime();
             LocalDateTime existingBookingEndTime = existingBooking.getEndTime();
 
-            if (bookingStartTime.isBefore(existingBookingEndTime) && bookingEndTime.isAfter(existingBookingStartTime))) {
+            if (bookingStartTime.isBefore(existingBookingEndTime) && bookingEndTime.isAfter(existingBookingStartTime)) {
                 throw new Exception("slot í not available, choose different time");
             }
 
-            if(bookingStartTime.isEqual(existingBookingStartTime) || bookingEndTime.isEqual(existingBookingEndTime)){
+            if (bookingStartTime.isEqual(existingBookingStartTime) || bookingEndTime.isEqual(existingBookingEndTime)) {
                 throw new Exception("slot í not available, choose different time");
             }
         }
@@ -74,25 +81,32 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<Booking> getBookingsByCustomer(Long customerId) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBookingsByCustomer'");
+        return bookingRepository.findByCustomerId(customerId);
     }
 
     @Override
     public List<Booking> getBookingByStudy(Long studyId) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBookingByStudy'");
+        return bookingRepository.findByStudyId(studyId);
     }
 
     @Override
-    public Booking getBookingById(Long id) {
+    public Booking getBookingById(Long id) throws Exception {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBookingById'");
+        Booking booking = bookingRepository.findById(id).orElse(null);
+        if (booking == null)
+            throw new Exception("booking not found");
+
+        return booking;
     }
 
     @Override
-    public Booking updateBooking(Long bookingId, BookingStatus status) {
+    public Booking updateBooking(Long bookingId, BookingStatus status) throws Exception {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateBooking'");
+        Booking booking = getBookingById(bookingId);
+
+        booking.setStatus(status);
+        return bookingRepository.save(booking);
     }
 
     @Override
