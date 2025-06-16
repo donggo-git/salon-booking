@@ -8,7 +8,7 @@ import dongcom.payload_dto.StudyDTO;
 import dongcom.payload_dto.UserDTO;
 import dongcom.payload_dto.BookingRequest;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 
 public interface BookingService {
@@ -23,7 +23,7 @@ public interface BookingService {
 
     Booking updateBooking(Long bookingId, BookingStatus status) throws Exception;
 
-    List<Booking> getBookingByDate(LocalDateTime date, Long studyId);
+    List<Booking> getBookingByDate(LocalDate date, Long studyId);
 
     StudyReport getStudyReport(Long studyId);
 }

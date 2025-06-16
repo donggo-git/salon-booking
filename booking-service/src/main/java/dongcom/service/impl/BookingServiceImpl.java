@@ -110,14 +110,29 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> getBookingByDate(LocalDateTime date, Long studyId) {
+    public List<Booking> getBookingByDate(LocalDate date, Long studyId) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getBookingByDate'");
+        List<Booking> allBookings = getBookingByStudy(studyId);
+
+        if (date == null) {
+            return allBookings;
+        }
+
+        return allBookings.stream()
+                .filter(booking -> isSameDate(booking.getStartTime(), date) || isSameDate(booking.getEndTime(), date))
+                .collect(Collectors.toList());
+        // throw new UnsupportedOperationException("Unimplemented method
+        // 'getBookingByDate'");
+    }
+
+    private boolean isSameDate(LocalDateTime dateTime, LocalDate date) {
+        return dateTime.toLocalDate().isEqual(date);
     }
 
     @Override
     public StudyReport getStudyReport(Long studyId) {
         // TODO Auto-generated method stub
+        List<Booking> bookings = getBookingByStudy(studyId);
         throw new UnsupportedOperationException("Unimplemented method 'getStudyReport'");
     }
 
