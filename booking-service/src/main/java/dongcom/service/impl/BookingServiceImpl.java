@@ -133,7 +133,21 @@ public class BookingServiceImpl implements BookingService {
     public StudyReport getStudyReport(Long studyId) {
         // TODO Auto-generated method stub
         List<Booking> bookings = getBookingByStudy(studyId);
-        throw new UnsupportedOperationException("Unimplemented method 'getStudyReport'");
+
+        int totalEarning = bookings.stream().mapToInt(Booking::getTotalPrice).sum();
+
+        Integer totalBooking = bookings.size();
+        List<Booking> cancelledBooking = bookings.stream()
+                .filter(booking -> booking.getStatus().equals(BookingStatus.CANCELED)).collect(Collectors.toList());
+        Double totalRefund = cancelledBooking.stream().mapToDouble(Booking::getTotalPrice).sum();
+
+        StudyReport report = new StudyReport();
+        report.setStudyId(studyId);
+        report.setCancelledBookings(cancelledBooking.size());
+        report.setTotalBookings(totalBooking);
+        report.setTotalEarnings(totalEarning);
+        report.setTotalRefund(totalRefund);
+        return report;
     }
 
 }
