@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import dongcom.modal.Booking;
 import dongcom.payload_dto.BookingRequest;
 import dongcom.payload_dto.StudyDTO;
@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class BookingController {
     private final BookingService BookingService;
 
+    @PostMapping
     public ResponseEntity<Booking> createBooking(
             @RequestParam Long studyId,
             @RequestBody BookingRequest bookingRequest) throws Exception {
@@ -45,5 +46,11 @@ public class BookingController {
 
         Booking booking = BookingService.createBooking(bookingRequest, user, study, serviceDTOSet);
         return ResponseEntity.ok(booking);
+    }
+
+    public ResponseEntity<Set<Booking>> getBookingsByCustomer() {
+
+        List<Booking> booking = BookingService.getBookingsByCustomer(1L);
+
     }
 }
