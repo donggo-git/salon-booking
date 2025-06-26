@@ -1,6 +1,8 @@
 package dongcom.controller;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import dongcom.mapper.BookingMapper;
 import dongcom.modal.Booking;
+import dongcom.payload_dto.BookingDTO;
 import dongcom.payload_dto.BookingRequest;
 import dongcom.payload_dto.StudyDTO;
 import dongcom.payload_dto.UserDTO;
@@ -48,9 +53,16 @@ public class BookingController {
         return ResponseEntity.ok(booking);
     }
 
-    public ResponseEntity<Set<Booking>> getBookingsByCustomer() {
+    public ResponseEntity<Set<BookingDTO>> getBookingsByCustomer() {
 
         List<Booking> booking = BookingService.getBookingsByCustomer(1L);
 
+        return null;
+    }
+
+    private Set<BookingDTO> getBookingDTOs(List<Booking> bookings) {
+        return bookings.stream().map(booking -> {
+            return BookingMapper.toDTO(booking);
+        }).collect(Collectors.toSet());
     }
 }
