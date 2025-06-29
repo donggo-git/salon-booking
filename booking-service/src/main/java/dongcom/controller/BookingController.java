@@ -1,5 +1,6 @@
 package dongcom.controller;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -89,10 +90,22 @@ public class BookingController {
 
     @PutMapping("/{bookingId}/status")
     public ResponseEntity<BookingDTO> updateBookingStatus(
-            @PathVariable Long bookingId) throws Exception {
+            @PathVariable Long bookingId,
+            @RequestParam BookingStatus status) throws Exception {
 
-        Booking booking = BookingService.getBookingById(bookingId);
+        Booking booking = BookingService.updateBooking(bookingId, status);
 
         return ResponseEntity.ok(BookingMapper.toDTO(booking));
     }
+
+    @GetMapping("/slots/study/{studyId}/date/{date}")
+    public ResponseEntity<List<BookingDTO>> getBookedSlot(
+            @PathVariable Long studyId,
+            @RequestParam LocalDate date) throws Exception {
+
+        List<Booking> booking = BookingService.getBookingByDate(date, studyId);
+
+        return ResponseEntity.ok(getBookingDTOs(booking));
+    }
+
 }
