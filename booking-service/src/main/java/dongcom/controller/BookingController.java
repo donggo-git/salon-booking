@@ -16,15 +16,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import dongcom.domain.BookingStatus;
 import dongcom.mapper.BookingMapper;
 import dongcom.modal.Booking;
+import dongcom.modal.StudyReport;
 import dongcom.payload_dto.BookingDTO;
 import dongcom.payload_dto.BookingRequest;
 import dongcom.payload_dto.StudyDTO;
 import dongcom.payload_dto.UserDTO;
 import dongcom.payload_dto.ServiceDTO;
 import dongcom.service.BookingService;
-
+import dongcom.payload_dto.BookingSlotDTO;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -99,13 +101,28 @@ public class BookingController {
     }
 
     @GetMapping("/slots/study/{studyId}/date/{date}")
-    public ResponseEntity<List<BookingDTO>> getBookedSlot(
+    public ResponseEntity<List<BookingSlotDTO>> getBookedSlot(
             @PathVariable Long studyId,
-            @RequestParam LocalDate date) throws Exception {
+            @RequestParam(required = false) LocalDate date) throws Exception {
 
-        List<Booking> booking = BookingService.getBookingByDate(date, studyId);
+        List<Booking> bookings = BookingService.getBookingByDate(date, studyId);
 
-        return ResponseEntity.ok(getBookingDTOs(booking));
+        List<BookingSlotDTO> slotDTOs = bookings.stream().map(booking -> {
+            BookingSlotDTO slotDTO = new BookingSlotDTO();
+            slotDTO.setStartTime(booking.getStartTime());
+            slotDTO.setEndTime(booking.getEndTime());
+
+            return slotDOT;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(slotDTOs);
     }
 
+    @GetMapping("/report")
+    public ResponseEntity<StudyReport> getStudyReport() throws Exception {
+
+        StudyReport bookings = BookingService.getStudyReport(1L)
+
+        return ResponseEntity.ok(null);
+    }
 }
