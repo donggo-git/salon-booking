@@ -1,6 +1,7 @@
 package dongcom.controller;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -45,6 +46,8 @@ public class BookingController {
 
         StudyDTO study = new StudyDTO();
         study.setId(studyId);
+        study.setOpenTime(LocalTime.now());
+        study.setCloseTime(LocalTime.now().plusHours(12));
 
         Set<ServiceDTO> serviceDTOSet = new HashSet<>();
         ServiceDTO serviceDTO = new ServiceDTO();
@@ -112,7 +115,7 @@ public class BookingController {
             slotDTO.setStartTime(booking.getStartTime());
             slotDTO.setEndTime(booking.getEndTime());
 
-            return slotDOT;
+            return slotDTO;
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(slotDTOs);
@@ -121,7 +124,7 @@ public class BookingController {
     @GetMapping("/report")
     public ResponseEntity<StudyReport> getStudyReport() throws Exception {
 
-        StudyReport bookings = BookingService.getStudyReport(1L)
+        StudyReport bookings = BookingService.getStudyReport(1L);
 
         return ResponseEntity.ok(null);
     }
