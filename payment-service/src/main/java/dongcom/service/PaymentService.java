@@ -16,4 +16,6 @@ public interface PaymentService {
     PaymentOrder getPaymentOrderByPaymentId(String paymentId);
 
     PaymentLink createRazorPaymentLink(UserDTO user, Long amount, Long orderId);
+
+    String createStripePaymentLink(UserDTO user, Long amount, Long orderId);
 }
