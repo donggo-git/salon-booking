@@ -18,9 +18,19 @@ import lombok.RequiredArgsConstructor;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentOrderRepository paymentOrderRepository;
 
+    @Value("${stripe.api.key}")
+    private String stripeSecretKey;
+
+    @Value("${razor.api.key}")
+    private String razorpayApiKey;
+
+    @Value("${razor.api.secret}")
+    private String razorpayApiSecret;
+
     @Override
     public PaymentLinkResponse createOrder(UserDTO user, BookingDTO booking, PaymentMethod paymentMethod) {
         // TODO Auto-generated method stub
+        Long amount = booking.getTotalPrice();
         throw new UnsupportedOperationException("Unimplemented method 'createOrder'");
     }
 
