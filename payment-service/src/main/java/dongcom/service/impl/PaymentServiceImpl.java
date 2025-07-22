@@ -12,6 +12,7 @@ import dongcom.payload.payload_dto.UserDTO;
 import dongcom.repository.PaymentOrderRepository;
 import dongcom.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,25 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public PaymentLinkResponse createOrder(UserDTO user, BookingDTO booking, PaymentMethod paymentMethod) {
         // TODO Auto-generated method stub
-        Long amount = booking.getTotalPrice();
+        Long amount = (long) booking.getTotalPrice();
+        PaymentOrder order = new PaymentOrder();
+        order.setAmount(amount);
+        order.setPaymentMethod(paymentMethod);
+        order.setBookingId(booking.getId());
+        order.setStudyId(booking.getStudyId());
+        PaymentOrder savedOrder = paymentOrderRepository.save(order);
+
+        PaymentLinkResponse paymentLinkResponse = new PaymentLinkResponse();
+
+        if (paymentMethod.equals(PaymentMethod.RAZORPAY)) {
+            PaymentLink payment = createRazorPaymentLink(user, savedOrder.getAmount(), savedOrder.getId());
+            String paymentUrl = payment.get("short_url");
+            String paymentUrlId = payment.get("id");
+            paymentLinkResponse.setPayment_link_url(paymentUrl);
+            paymentLinkResponse.setGetPayment_link_id(paymentUrlId);
+
+            savedOrder.setPaymentLinkId(paymentUrlId);
+        }
         throw new UnsupportedOperationException("Unimplemented method 'createOrder'");
     }
 
