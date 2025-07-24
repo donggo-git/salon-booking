@@ -49,20 +49,29 @@ public class PaymentServiceImpl implements PaymentService {
             paymentLinkResponse.setGetPayment_link_id(paymentUrlId);
 
             savedOrder.setPaymentLinkId(paymentUrlId);
+
+            paymentOrderRepository.save(savedOrder);
+        } else {
+            String paymentUrl = createStripePaymentLink(user, savedOrder.getAmount(), savedOrder.getId());
+            paymentLinkResponse.setPayment_link_url(paymentUrl);
         }
-        throw new UnsupportedOperationException("Unimplemented method 'createOrder'");
+        return paymentLinkResponse;
     }
 
     @Override
-    public PaymentOrder getPaymentOrderById(Long id) {
+    public PaymentOrder getPaymentOrderById(Long id) throws Exception {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPaymentOrderById'");
+        PaymentOrder paymentOrder = paymentOrderRepository.findById(id).orElse(null);
+        if (paymentOrder == null)
+            throw new Exception("payment order not found");
+
+        return paymentOrder;
     }
 
     @Override
     public PaymentOrder getPaymentOrderByPaymentId(String paymentId) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPaymentOrderByPaymentId'");
+        return paymentOrderRepository.findByPaymentId(paymentId);
     }
 
     @Override
