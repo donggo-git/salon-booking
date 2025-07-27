@@ -1,8 +1,12 @@
 package dongcom.service.impl;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.razorpay.Payment;
 import com.razorpay.PaymentLink;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
 import dongcom.domain.PaymentMethod;
 import dongcom.modal.PaymentOrder;
@@ -75,9 +79,31 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentLink createRazorPaymentLink(UserDTO user, Long amount, Long orderId) {
+    public PaymentLink createRazorPaymentLink(UserDTO user, Long Amount, Long orderId) throws RazorpayException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createRazorPaymentLink'");
+        Long amount = Amount * 100;
+
+        RazorpayClient razorpay = new RazorpayClient(razorpayApiKey, razorpayApiSecret);
+        JSONObject paymentLinkRequest = new JSONObject();
+
+        paymentLinkRequest.put("amount", amount);
+        paymentLinkRequest.put("currency", "INR");
+
+        JSONObject customer = new JSONObject();
+        customer.put("name", user.getFullName());
+        customer.put("email", user.getEmail());
+
+        paymentLinkRequest.put("customer", customer);
+
+        JSONObject notify = new JSONObject();
+        notify.put("email", true);
+
+        paymentLinkRequest.put("notify", notify);
+        paymentLinkRequest.put("reminder_enable", true);
+        paymentLinkRequest.put("callback_url", "http://localhost:3000/payment-success" + orderId);
+        paymentLinkRequest.put("callback_method", "get");
+
+        return razorpay.paymentLink.create(paymentLinkRequest);
     }
 
     @Override

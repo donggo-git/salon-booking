@@ -7,6 +7,7 @@ import dongcom.payload.payload_dto.UserDTO;
 import dongcom.payload.payload_dto.BookingDTO;
 
 import com.razorpay.PaymentLink;
+import com.razorpay.RazorpayException;
 
 public interface PaymentService {
     PaymentLinkResponse createOrder(UserDTO user, BookingDTO booking, PaymentMethod paymentMethod);
@@ -15,7 +16,8 @@ public interface PaymentService {
 
     PaymentOrder getPaymentOrderByPaymentId(String paymentId) throws Exception;
 
-    PaymentLink createRazorPaymentLink(UserDTO user, Long amount, Long orderId);
+    PaymentLink createRazorPaymentLink(UserDTO user, Long amount, Long orderId)
+            throws RazorpayException;
 
     String createStripePaymentLink(UserDTO user, Long amount, Long orderId);
 }
