@@ -128,6 +128,9 @@ public class PaymentServiceImpl implements PaymentService {
                                 .build())
                         .build())
                 .build();
+
+        Session session = Session.create(params);
+        return session.getUrl();
         throw new UnsupportedOperationException("Unimplemented method 'createStripePaymentLink'");
     }
 

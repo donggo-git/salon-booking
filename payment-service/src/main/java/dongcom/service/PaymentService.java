@@ -10,7 +10,7 @@ import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayException;
 
 public interface PaymentService {
-    PaymentLinkResponse createOrder(UserDTO user, BookingDTO booking, PaymentMethod paymentMethod);
+    PaymentLinkResponse createOrder(UserDTO user, BookingDTO booking, com.stripe.model.PaymentMethod paymentMethod);
 
     PaymentOrder getPaymentOrderById(Long id) throws Exception;
 
