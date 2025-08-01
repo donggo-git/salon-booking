@@ -20,4 +20,6 @@ public interface PaymentService {
             throws RazorpayException;
 
     String createStripePaymentLink(UserDTO user, Long amount, Long orderId);
+
+    Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId);
 }

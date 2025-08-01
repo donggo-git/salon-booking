@@ -12,6 +12,7 @@ import com.stripe.model.Review.Session;
 import com.stripe.param.billingportal.SessionCreateParams;
 
 import dongcom.domain.PaymentMethod;
+import dongcom.domain.PaymentOrderStatus;
 import dongcom.modal.PaymentOrder;
 import dongcom.payload.PaymentLinkResponse;
 import dongcom.payload.payload_dto.BookingDTO;
@@ -131,7 +132,32 @@ public class PaymentServiceImpl implements PaymentService {
 
         Session session = Session.create(params);
         return session.getUrl();
-        throw new UnsupportedOperationException("Unimplemented method 'createStripePaymentLink'");
     }
 
+    @Override
+    public Boolean proceedPayment(PaymentOrder paymentOrder, String paymentId, String paymentLinkId) {
+
+        if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
+            if (paymentOrder.getPaymentMethod().equals(PaymentMethod.RAZORPAY)) {
+                RazorpayClient razorpay = new RazorpayClient(razorpayApiKey, razorpayApiSecret);
+
+                Payment payment = razorpay.payments.fetch(paymentId);
+                Integer amount = payment.get("amount");
+                String status = payment.get("status");
+
+                if (status.equals("captured")) {
+
+                    paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                    paymentOrderRepository.save(paymentOrder);
+                    return true;
+                }
+                return false;
+            } else {
+                paymentOrder.setStatus(PaymentOrderStatus.SUCCESS);
+                paymentOrderRepository.save(paymentOrder);
+                return true;
+            }
+        }
+        return false;
+    }
 }
