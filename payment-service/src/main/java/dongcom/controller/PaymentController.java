@@ -3,6 +3,7 @@ package dongcom.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,11 +54,14 @@ public class PaymentController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/paymentOrderId")
-    public ResponseEntity<PaymentOrder> processPayment(
-            @PathVariable Long paymentOrderId) throws Exception {
+    @PatchMapping("/proceed")
+    public ResponseEntity<Boolean> processPayment(
+            @RequestParam String paymentId,
+            @RequestParam String paymentLinkId) throws Exception {
 
-        PaymentOrder res = paymentService.getPaymentOrderById(paymentOrderId);
+        PaymentOrder paymentOrder = paymentService.getPaymentOrderByPaymentId(paymentLinkId);
+
+        Boolean res = paymentService.proceedPayment(paymentOrder, paymentId, paymentLinkId);
 
         return ResponseEntity.ok(res);
     }
